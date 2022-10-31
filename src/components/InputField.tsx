@@ -1,15 +1,26 @@
-import { Dispatch, FormEvent, SetStateAction, useRef } from 'react';
-
+import { nanoid } from 'nanoid';
+import { FormEvent, useRef } from 'react';
+import { useInput, useReduce } from '../hooks/TodoContext';
 import './styles.css';
 
-interface Props {
-  input: string;
-  setInput: Dispatch<SetStateAction<string>>;
-  handleAdd: (e: FormEvent<HTMLFormElement>) => void;
-}
+const InputField = () => {
 
+  const { input, setInput } = useInput();
+  const { dispatch } = useReduce()
 
-const InputField = ({ input, setInput, handleAdd }: Props) => {
+  const handleAdd = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    dispatch({
+      type: 'add',
+      payload: {
+        id: nanoid(),
+        todo: input,
+        isDone: false,
+        edit: false
+      }
+    });
+  };
 
   const inputRef = useRef<HTMLInputElement>(null);
 
