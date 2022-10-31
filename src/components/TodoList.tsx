@@ -1,24 +1,26 @@
 import { Dispatch, SetStateAction } from "react";
-import SingleTodo from "./SingleTodo";
+/* import SingleTodo from "./SingleTodo"; */
 
 import { Todo } from "../models";
 
 import "./styles.css";
+import SingleTodo from "./SingleTodo";
+import { Actions } from "../hooks/TodoReducer";
 
 interface Props {
   todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>
+  dispatch: Dispatch<Actions>
 }
 
-const TodoList = ({ todos, setTodos }: Props) => {
+const TodoList = ({ todos, dispatch }: Props) => {
+
   return (
     <div className="todos">
       {todos.map(todo => (
         <SingleTodo
           todo={todo}
           key={todo.id}
-          todos={todos}
-          setTodos={setTodos}
+          dispatch={dispatch}
         />
       ))}
 

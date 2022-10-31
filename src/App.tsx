@@ -1,37 +1,37 @@
-import { FormEvent, useState } from 'react';
-import { nanoid } from 'nanoid';
+import { FormEvent, useReducer, useState } from 'react';
 
 import InputField from './components/InputField';
 import TodoList from './components/TodoList';
 
-import { Todo } from './models';
 import './App.css';
+import { TodoReducer } from './hooks/TodoReducer';
+import { nanoid } from 'nanoid';
 
 const App = () => {
 
-  const [todo, setTodo] = useState<string>("");
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [input, setInput] = useState<string>("");
+  const [todos, dispatch] = useReducer(TodoReducer, [])
 
   const handleAdd = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (todo) {
-      setTodos([
-        ...todos, {
-          id: nanoid(),
-          todo,
-          isDone: false
-        }
-      ]);
-      setTodo('');
-    }
+    dispatch({
+      type: 'add',
+      payload: {
+        id: nanoid(),
+        todo: input,
+        isDone: false,
+        edit: false
+      }
+    });
   };
+
 
   return (
     <div className="App">
       <span className="heading">Taskify</span>
-      <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
-      <TodoList todos={todos} setTodos={setTodos} />
+      <InputField input={input} setInput={setInput} handleAdd={handleAdd} />
+      <TodoList todos={todos} dispatch={dispatch} />
     </div>
   )
 };
