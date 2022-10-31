@@ -1,7 +1,8 @@
 
 import "./styles.css";
-import SingleTodoReducer from "./SingleTodoReducer";
 import { useReduce } from "../hooks/TodoContext";
+import SingleTodo from "./SingleTodo";
+import { Actions } from "../hooks/TodoReducer";
 
 const TodoList = () => {
 
@@ -10,7 +11,7 @@ const TodoList = () => {
   return (
     <div className="todos">
       {todos.map(todo => (
-        <SingleTodoReducer
+        <SingleTodo
           todo={todo}
           key={todo.id}
         />

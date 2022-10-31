@@ -1,50 +1,72 @@
-import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, FormEvent, useEffect, useRef, useState } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 import { Todo } from "../models";
+import { Actions } from "../hooks/TodoReducer";
 
 import "./styles.css";
 
 interface Props {
   todo: Todo;
-  todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
+  dispatch: Dispatch<Actions>
 }
 
-const SingleTodo = ({ todo, todos, setTodos }: Props) => {
-  const [edit, setEdit] = useState<boolean>(false);
+const SingleTodoReducer = ({ todo, dispatch }: Props) => {
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
-  const handleEdit = (e: FormEvent<HTMLFormElement>, id: string) => {
+  const setEdit = (id: string) => {
+    dispatch({
+      type: 'edit',
+      payload: {
+        id
+      }
+    })
+  };
+
+  const handleEditTodo = (e: FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
 
-    setTodos(todos.map(todo => (
-      todo.id === id ?
-        { ...todo, todo: editTodo } : todo
-    )));
-    setEdit(false);
+    dispatch({
+      type: 'editTodo',
+      payload: {
+        id,
+        editTodo,
+        edit: false
+      }
+    });
+
   };
 
   const handleDelete = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    dispatch({
+      type: 'delete',
+      payload: {
+        id,
+      },
+    });
   };
 
   const handleDone = (id: string) => {
-    setTodos(todos.map(todo => todo.id === id ?
-      { ...todo, isDone: !todo.isDone } : todo
-    ));
+    dispatch({
+      type: 'done',
+      payload: {
+        id
+      }
+    });
   };
+
+
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, [edit]);
+  }, [todo.edit]);
 
   return (
-    <form className="todos-single" onSubmit={(e) => handleEdit(e, todo.id)}>
+    <form className="todos-single" onSubmit={(e) => handleEditTodo(e, todo.id)}>
       {
-        edit ? (
+        todo.edit ? (
           <input value={editTodo} onChange={(e) => setEditTodo(e.target.value)} className="todos-single-text" ref={inputRef} />
         ) :
           todo.isDone ? (
@@ -57,7 +79,7 @@ const SingleTodo = ({ todo, todos, setTodos }: Props) => {
 
       <div>
         <span className="icon" onClick={() => {
-          if (!edit && !todo.isDone) setEdit(!edit);
+          if (!todo.edit && !todo.isDone) setEdit(todo.id);
         }}>
           <AiFillEdit />
         </span>
@@ -72,4 +94,4 @@ const SingleTodo = ({ todo, todos, setTodos }: Props) => {
   );
 };
 
-export default SingleTodo;
+export default SingleTodoReducer;
