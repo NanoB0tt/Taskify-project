@@ -1,18 +1,14 @@
-import { Dispatch, FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
+import { useReduce } from "../hooks/TodoContext";
 import { Todo } from "../models";
-import { Actions } from "../hooks/TodoReducer";
 
 import "./styles.css";
 
-interface Props {
-  todo: Todo;
-  dispatch: Dispatch<Actions>
-}
-
-const SingleTodoReducer = ({ todo, dispatch }: Props) => {
+const SingleTodoReducer = ({ todo }: { todo: Todo }) => {
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
+  const { dispatch } = useReduce();
 
   const setEdit = (id: string) => {
     dispatch({

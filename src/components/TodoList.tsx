@@ -1,12 +1,10 @@
-
 import "./styles.css";
 import { useReduce } from "../hooks/TodoContext";
 import SingleTodo from "./SingleTodo";
-import { Actions } from "../hooks/TodoReducer";
 
 const TodoList = () => {
 
-  const { todos, dispatch } = useReduce();
+  const { todos } = useReduce();
 
   return (
     <div className="todos">
