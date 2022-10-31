@@ -1,18 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
-/* import SingleTodo from "./SingleTodo"; */
-
-import { Todo } from "../models";
 
 import "./styles.css";
 import SingleTodoReducer from "./SingleTodoReducer";
-import { Actions } from "../hooks/TodoReducer";
+import { useReduce } from "../hooks/TodoContext";
 
-interface Props {
-  todos: Todo[];
-  dispatch: Dispatch<Actions>
-}
+const TodoList = () => {
 
-const TodoList = ({ todos, dispatch }: Props) => {
+  const { todos, dispatch } = useReduce();
 
   return (
     <div className="todos">
@@ -20,7 +13,6 @@ const TodoList = ({ todos, dispatch }: Props) => {
         <SingleTodoReducer
           todo={todo}
           key={todo.id}
-          dispatch={dispatch}
         />
       ))}
 
